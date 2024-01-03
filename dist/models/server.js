@@ -16,6 +16,7 @@ exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const config_1 = require("../database/config");
+const mailer_1 = require("../mailer/mailer");
 const auth_1 = __importDefault(require("../routes/auth"));
 const orders_1 = __importDefault(require("../routes/orders"));
 class Server {
@@ -38,7 +39,10 @@ class Server {
         </head>
         <body>
           <h1>La API MoneyNet esta Online!</h1>
-          <p>Para ver la documentacion de la API, ir a la siguiente direccion:</p>
+          <br/>
+          <p>${mailer_1.verifyTransporter}</p>
+          <br/>
+          <h3>Para ver la documentacion de la API, ir a la siguiente direccion:</h3>
           <a href="https://documenter.getpostman.com/view/30722200/2s9YsFDtUm" target="_blank">https://documenter.getpostman.com/view/30722200/2s9YsFDtUm</a>
         </body>
       </html>

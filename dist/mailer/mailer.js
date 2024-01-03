@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEmail = void 0;
+exports.sendEmail = exports.verifyTransporter = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 //transporter Nodemailer con cuenta de Gmail
 const transporter = nodemailer_1.default.createTransport({
@@ -28,10 +28,13 @@ const transporter = nodemailer_1.default.createTransport({
     from: "moneynetservice@gmail.com"
 });
 // Verificacion del transporter para enviar correos
+exports.verifyTransporter = "";
 transporter.verify().then(() => {
     console.log('Listo para enviar correos');
+    exports.verifyTransporter = "El servicio de correos esta funcionando correctamente";
 }).catch((error) => {
     console.error('Error al verificar el transporte', error);
+    exports.verifyTransporter = "Error al iniciar el servicio de correos!";
 });
 const sendEmail = (to, code) => __awaiter(void 0, void 0, void 0, function* () {
     try {

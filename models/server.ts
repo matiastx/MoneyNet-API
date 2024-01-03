@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import { dbConnection } from '../database/config';
+import { verifyTransporter } from '../mailer/mailer';
 
 import authRoutes from "../routes/auth"
 import ordersRoutes from "../routes/orders"
@@ -35,7 +36,10 @@ export class Server {
         </head>
         <body>
           <h1>La API MoneyNet esta Online!</h1>
-          <p>Para ver la documentacion de la API, ir a la siguiente direccion:</p>
+          <br/>
+          <p>${verifyTransporter}</p>
+          <br/>
+          <h3>Para ver la documentacion de la API, ir a la siguiente direccion:</h3>
           <a href="https://documenter.getpostman.com/view/30722200/2s9YsFDtUm" target="_blank">https://documenter.getpostman.com/view/30722200/2s9YsFDtUm</a>
         </body>
       </html>

@@ -16,12 +16,16 @@ const transporter = nodemailer.createTransport({
 })
 
 // Verificacion del transporter para enviar correos
+export let verifyTransporter:string = ""
+
 
 transporter.verify().then(()=>{
   console.log('Listo para enviar correos')
+  verifyTransporter = "El servicio de correos esta funcionando correctamente"
 }
 ).catch((error)=>{
   console.error('Error al verificar el transporte', error)
+  verifyTransporter = "Error al iniciar el servicio de correos!"
 })
 
 export const sendEmail =async (to:string, code: string): Promise<void> => {
