@@ -25,6 +25,7 @@ class Server {
         this.port = process.env.PORT;
         this.authPath = "/auth";
         this.orderPath = "/orders";
+        this.mailerStatus = "Verificando servicio de correos...";
         this.dbConnection();
         this.middlewares();
         this.routes();
@@ -45,15 +46,16 @@ class Server {
         this.app.use(this.orderPath, orders_1.default);
     }
     verifyMailer() {
-        let verifyTransporter = "";
+        console.log(this.mailerStatus);
         mailer_1.transporter.verify().then(() => {
-            console.log('Listo para enviar correos');
-            return verifyTransporter = "El servicio de correos esta funcionando correctamente";
+            // console.log('Listo para enviar correos')
+            this.mailerStatus = "El servicio de correos esta funcionando correctamente";
+            console.log(this.mailerStatus);
         }).catch((error) => {
-            console.error('Error al verificar el transporte', error);
-            return verifyTransporter = "Error al iniciar el servicio de correos!";
+            // console.error('Error al verificar el transporte', error)
+            this.mailerStatus = "Error al iniciar el servicio de correos!";
+            console.log(this.mailerStatus, error);
         });
-        this.mailerStatus = verifyTransporter;
     }
     apiHTML() {
         this.app.get('/', (req, res) => {
