@@ -18,24 +18,38 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 const transporter = nodemailer_1.default.createTransport({
     service: "gmail",
     auth: {
-        user: process.env.MAIL_USERNAME,
-        pass: process.env.MAIL_PASSWORD,
+        user: "moneynetservice@gmail.com",
+        pass: "qrosgqysfakaxznk"
+    },
+    //Configuración de seguridad para evitar errores con Gmail
+    tls: {
+        rejectUnauthorized: false
     },
     from: "moneynetservice@gmail.com"
 });
+// Verificacion del transporter para enviar correos
+transporter.verify().then(() => {
+    console.log('Listo para enviar correos');
+}).catch((error) => {
+    console.error('Error al verificar el transporte', error);
+});
 const sendEmail = (to, code) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        //Configura los detalles del correo electronico
         const mailOptions = {
-            form: '"MoneyNet Services" moneynetservice@gmail.com"',
+            form: '"MoneyNet" moneynetservice@gmail.com"',
             to,
-            subject: "Código de verificación para tu cuenta en MoneyNet",
-            text: `Hola, este es tu código de verificación: ${code}`,
+            subject: "Código de verificación MoneyNet",
+            text: `
+          Hola!, este es tu codigo de verificacion para tu cuenta de MoneyNet: ${code}
+          `
         };
+        //Envía el correo electrónico
         yield transporter.sendMail(mailOptions);
-        console.log('Email enviado correctamente');
+        console.log('Correo electronico enviado correctamente');
     }
     catch (error) {
-        console.error('Error al enviar el email');
+        console.error('Error al enviar el correo electrónico');
     }
 });
 exports.sendEmail = sendEmail;
