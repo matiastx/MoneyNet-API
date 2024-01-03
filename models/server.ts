@@ -1,7 +1,6 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import { dbConnection } from '../database/config';
-import nodemailer from "nodemailer";
 import { transporter } from '../mailer/mailer';
 
 import authRoutes from "../routes/auth"
@@ -31,8 +30,6 @@ export class Server {
 
     this.apiHTML();
   }
-
-
 
   async dbConnection(): Promise<void> {
     await dbConnection();
