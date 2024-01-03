@@ -35,6 +35,8 @@ export class Server {
         </head>
         <body>
           <h1>La API MoneyNet esta Online!</h1>
+          <p>Para ver la documentacion de la API, ir a la siguiente direccion:</p>
+          <a href="https://documenter.getpostman.com/view/30722200/2s9YsFDtUm">https://documenter.getpostman.com/view/30722200/2s9YsFDtUm</a>
         </body>
       </html>
       `;
