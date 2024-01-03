@@ -71,7 +71,6 @@ export class Server {
         </head>
         <body>
           <h1>La API MoneyNet esta Online!</h1>
-          <br/>
           <p>${this.mailerStatus}</p>
           <br/>
           <h3>Para ver la documentacion de la API, ir a la siguiente direccion:</h3>
