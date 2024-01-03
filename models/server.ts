@@ -1,7 +1,8 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import { dbConnection } from '../database/config';
-import { verifyTransporter } from '../mailer/mailer';
+import nodemailer from "nodemailer";
+import { transporter } from '../mailer/mailer';
 
 import authRoutes from "../routes/auth"
 import ordersRoutes from "../routes/orders"
@@ -11,6 +12,7 @@ export class Server {
   port: string | number | undefined;
   authPath: string;
   orderPath: string;
+  mailerStatus: string; 
 
   constructor() {
     this.app = express();
@@ -24,30 +26,12 @@ export class Server {
 
     this.routes()
 
+    this.verifyMailer();
+
     this.apiHTML();
   }
 
-  apiHTML(): void {
-    this.app.get('/', (req, res) => {
-      const htmlContent = `
-      <html>
-        <head>
-          <title>MoneyNet API</title>
-        </head>
-        <body>
-          <h1>La API MoneyNet esta Online!</h1>
-          <br/>
-          <p>${verifyTransporter}</p>
-          <br/>
-          <h3>Para ver la documentacion de la API, ir a la siguiente direccion:</h3>
-          <a href="https://documenter.getpostman.com/view/30722200/2s9YsFDtUm" target="_blank">https://documenter.getpostman.com/view/30722200/2s9YsFDtUm</a>
-        </body>
-      </html>
-      `;
-      res.send(htmlContent);
-    });
-  }
-  
+
 
   async dbConnection(): Promise<void> {
     await dbConnection();
@@ -61,6 +45,40 @@ export class Server {
   routes(): void {
     this.app.use(this.authPath, authRoutes);
     this.app.use(this.orderPath, ordersRoutes);
+  }
+
+  verifyMailer(): void {
+    let verifyTransporter: string | undefined= ""
+    transporter.verify().then(()=>{
+      console.log('Listo para enviar correos')
+      return verifyTransporter = "El servicio de correos esta funcionando correctamente"
+    }
+    ).catch((error)=>{
+      console.error('Error al verificar el transporte', error)
+      return verifyTransporter = "Error al iniciar el servicio de correos!"
+    })
+    this.mailerStatus = verifyTransporter as string;
+  }
+
+  apiHTML(): void {
+    this.app.get('/', (req, res) => {
+      const htmlContent = `
+      <html>
+        <head>
+          <title>MoneyNet API</title>
+        </head>
+        <body>
+          <h1>La API MoneyNet esta Online!</h1>
+          <br/>
+          <p>${this.mailerStatus}</p>
+          <br/>
+          <h3>Para ver la documentacion de la API, ir a la siguiente direccion:</h3>
+          <a href="https://documenter.getpostman.com/view/30722200/2s9YsFDtUm" target="_blank">https://documenter.getpostman.com/view/30722200/2s9YsFDtUm</a>
+        </body>
+      </html>
+      `;
+      res.send(htmlContent);
+    });
   }
 
   listen(): void {

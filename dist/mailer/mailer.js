@@ -12,10 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEmail = exports.verifyTransporter = void 0;
+exports.sendEmail = exports.transporter = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 //transporter Nodemailer con cuenta de Gmail
-const transporter = nodemailer_1.default.createTransport({
+exports.transporter = nodemailer_1.default.createTransport({
     service: "gmail",
     auth: {
         user: "moneynetservice@gmail.com",
@@ -26,15 +26,6 @@ const transporter = nodemailer_1.default.createTransport({
         rejectUnauthorized: false
     },
     from: "moneynetservice@gmail.com"
-});
-// Verificacion del transporter para enviar correos
-exports.verifyTransporter = "";
-transporter.verify().then(() => {
-    console.log('Listo para enviar correos');
-    exports.verifyTransporter = "El servicio de correos esta funcionando correctamente";
-}).catch((error) => {
-    console.error('Error al verificar el transporte', error);
-    exports.verifyTransporter = "Error al iniciar el servicio de correos!";
 });
 const sendEmail = (to, code) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -48,7 +39,7 @@ const sendEmail = (to, code) => __awaiter(void 0, void 0, void 0, function* () {
           `
         };
         //Envía el correo electrónico
-        yield transporter.sendMail(mailOptions);
+        yield exports.transporter.sendMail(mailOptions);
         console.log('Correo electronico enviado correctamente');
     }
     catch (error) {

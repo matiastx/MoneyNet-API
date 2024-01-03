@@ -28,27 +28,8 @@ class Server {
         this.dbConnection();
         this.middlewares();
         this.routes();
+        this.verifyMailer();
         this.apiHTML();
-    }
-    apiHTML() {
-        this.app.get('/', (req, res) => {
-            const htmlContent = `
-      <html>
-        <head>
-          <title>MoneyNet API</title>
-        </head>
-        <body>
-          <h1>La API MoneyNet esta Online!</h1>
-          <br/>
-          <p>${mailer_1.verifyTransporter}</p>
-          <br/>
-          <h3>Para ver la documentacion de la API, ir a la siguiente direccion:</h3>
-          <a href="https://documenter.getpostman.com/view/30722200/2s9YsFDtUm" target="_blank">https://documenter.getpostman.com/view/30722200/2s9YsFDtUm</a>
-        </body>
-      </html>
-      `;
-            res.send(htmlContent);
-        });
     }
     dbConnection() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -62,6 +43,37 @@ class Server {
     routes() {
         this.app.use(this.authPath, auth_1.default);
         this.app.use(this.orderPath, orders_1.default);
+    }
+    verifyMailer() {
+        let verifyTransporter = "";
+        mailer_1.transporter.verify().then(() => {
+            console.log('Listo para enviar correos');
+            return verifyTransporter = "El servicio de correos esta funcionando correctamente";
+        }).catch((error) => {
+            console.error('Error al verificar el transporte', error);
+            return verifyTransporter = "Error al iniciar el servicio de correos!";
+        });
+        this.mailerStatus = verifyTransporter;
+    }
+    apiHTML() {
+        this.app.get('/', (req, res) => {
+            const htmlContent = `
+      <html>
+        <head>
+          <title>MoneyNet API</title>
+        </head>
+        <body>
+          <h1>La API MoneyNet esta Online!</h1>
+          <br/>
+          <p>${this.mailerStatus}</p>
+          <br/>
+          <h3>Para ver la documentacion de la API, ir a la siguiente direccion:</h3>
+          <a href="https://documenter.getpostman.com/view/30722200/2s9YsFDtUm" target="_blank">https://documenter.getpostman.com/view/30722200/2s9YsFDtUm</a>
+        </body>
+      </html>
+      `;
+            res.send(htmlContent);
+        });
     }
     listen() {
         this.app.listen(this.port, () => {
