@@ -5,6 +5,8 @@ import { recolectarErrores } from '../middlewares/recolectErrors';
 import { ValidarUser } from '../middlewares/validarUser';
 import { check } from 'express-validator';
 
+// Rutas para las ordenes
+
 const router = Router();
 
 router.get('/',[
